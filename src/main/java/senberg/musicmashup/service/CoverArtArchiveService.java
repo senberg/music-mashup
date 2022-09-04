@@ -25,9 +25,13 @@ public class CoverArtArchiveService {
     @Autowired
     RestTemplate restTemplate;
 
-    public Optional<CoverArtArchiveResponse> get(UUID mbid){
+    public Optional<String> getImage(UUID id){
+        return get(id).map(this::extractImageFromResponse);
+    }
+
+    private Optional<CoverArtArchiveResponse> get(UUID id){
         try {
-            return Optional.ofNullable(restTemplate.getForObject(releaseGroupApiURL, CoverArtArchiveResponse.class, mbid));
+            return Optional.ofNullable(restTemplate.getForObject(releaseGroupApiURL, CoverArtArchiveResponse.class, id));
         } catch(HttpClientErrorException.NotFound e){
             return Optional.empty();
         } catch(RestClientException e){
@@ -36,7 +40,7 @@ public class CoverArtArchiveService {
         }
     }
 
-    public String extractImageFromResponse(CoverArtArchiveResponse response) {
+    private String extractImageFromResponse(CoverArtArchiveResponse response) {
         if(response.getImages() == null){
             throw new ApplicationException(BAD_GATEWAY, "Missing images in response from Cover Art Archive.");
         } else if(response.getImages().isEmpty()) {

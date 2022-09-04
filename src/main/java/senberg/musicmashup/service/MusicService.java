@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import senberg.musicmashup.domain.music.Album;
 import senberg.musicmashup.domain.music.MusicResponse;
 import senberg.musicmashup.domain.musicbrainz.Artist;
-import senberg.musicmashup.domain.wikidata.WikidataResponse;
-import senberg.musicmashup.domain.wikipedia.WikipediaResponse;
 
 import java.util.UUID;
 
@@ -24,10 +22,8 @@ public class MusicService {
     public MusicResponse get(UUID mbid){
         Artist artist = musicBrainzService.get(mbid);
         String wikidataId = musicBrainzService.extractWikidataIdFromArtist(artist);
-        WikidataResponse wikidataResponse = wikidataService.get(wikidataId);
-        String wikipediaTitle = wikidataService.extractWikipediaTitleFromResponse(wikidataId, wikidataResponse);
-        WikipediaResponse wikipediaResponse = wikipediaService.get(wikipediaTitle);
-        String description = wikipediaService.extractDescriptionFromResponse(wikipediaResponse);
+        String wikipediaTitle = wikidataService.getWikipediatitle(wikidataId);
+        String description = wikipediaService.getDescription(wikipediaTitle);
         MusicResponse musicResponse = new MusicResponse();
         musicResponse.setMbid(mbid);
         musicResponse.setDescription(description);
@@ -36,7 +32,7 @@ public class MusicService {
             Album album = new Album();
             album.setTitle(releaseGroup.getTitle());
             album.setId(releaseGroup.getId());
-            coverArtArchiveService.get(releaseGroup.getId()).ifPresent(response -> album.setImage(coverArtArchiveService.extractImageFromResponse(response)));
+            coverArtArchiveService.getImage(releaseGroup.getId()).ifPresent(album::setImage);
             musicResponse.getAlbums().add(album);
         });
 

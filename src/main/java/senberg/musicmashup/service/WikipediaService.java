@@ -21,7 +21,12 @@ public class WikipediaService {
     @Autowired
     RestTemplate restTemplate;
 
-    public WikipediaResponse get(String title){
+    public String getDescription(String title){
+        WikipediaResponse wikipediaResponse = get(title);
+        return extractDescriptionFromResponse(wikipediaResponse);
+    }
+
+    private WikipediaResponse get(String title){
         try {
             return restTemplate.getForObject(pageApiURL, WikipediaResponse.class, title);
         } catch (RestClientException e){
@@ -30,7 +35,7 @@ public class WikipediaService {
         }
     }
 
-    public String extractDescriptionFromResponse(WikipediaResponse response) {
+    private String extractDescriptionFromResponse(WikipediaResponse response) {
         if(response.getQuery() == null){
             throw new ApplicationException(BAD_GATEWAY, "Missing query in response from Wikipedia.");
         } else if(response.getQuery().getPages() == null) {

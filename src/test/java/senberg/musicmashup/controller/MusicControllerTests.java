@@ -31,7 +31,9 @@ public class MusicControllerTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(header().string(CONTENT_TYPE, APPLICATION_JSON_VALUE))
-                .andExpect(content().string(containsString("\"mbid\":\"5b11f4ce-a62d-471e-81fc-a69a8278c7da\"")));
+                .andExpect(content().string(containsString("\"mbid\" : \"5b11f4ce-a62d-471e-81fc-a69a8278c7da\"")))
+                .andExpect(content().string(containsString("\"description\" : \"<p class=\\\"mw-empty-elt\\\">\\n\\n\\n\\n</p>\\n<p><b>Nirvana</b>")))
+                .andExpect(content().string(containsString("\"title\" : \"Forever Changing - An Introduction To Nirvana\"")));
     }
 
     @Test

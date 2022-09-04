@@ -23,6 +23,7 @@
 
 ## TODO / Improvements
 
+    Add tests for all services.
     Add throttling to avoid being blacklisted in the MusicBrainz API.
     Add caching for retrieved data since the external data seldom changes.
     Pagination support, important for retrieving artists with many albums.

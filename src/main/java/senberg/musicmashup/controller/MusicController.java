@@ -26,7 +26,6 @@ public class MusicController {
 
     @Autowired
     MusicService musicService;
-
     @Autowired
     Executor musicControllerExecutor;
 
@@ -49,7 +48,7 @@ public class MusicController {
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+    public ResponseEntity<String> handleIllegalArgumentException(@SuppressWarnings("unused") IllegalArgumentException e) {
         return new ResponseEntity<>("Invalid parameter. The MusicBrainz Identifier must be a valid UUID.", BAD_REQUEST);
     }
 }

@@ -22,7 +22,12 @@ public class WikidataService {
     @Autowired
     RestTemplate restTemplate;
 
-    public WikidataResponse get(String id){
+    public String getWikipediatitle(String wikidataId){
+        WikidataResponse wikidataResponse = get(wikidataId);
+        return extractWikipediaTitleFromResponse(wikidataId, wikidataResponse);
+    }
+
+    private WikidataResponse get(String id){
         try {
             return restTemplate.getForObject(entityInfoURL, WikidataResponse.class, id);
         } catch (RestClientException e){
@@ -31,7 +36,7 @@ public class WikidataService {
         }
     }
 
-    public String extractWikipediaTitleFromResponse(String wikidataId, WikidataResponse response){
+    private String extractWikipediaTitleFromResponse(String wikidataId, WikidataResponse response){
         if(response.getEntities() == null){
             throw new ApplicationException(BAD_GATEWAY, "Missing entities in response from Wikidata.");
         } else if(!response.getEntities().containsKey(wikidataId)){
