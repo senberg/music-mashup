@@ -11,7 +11,8 @@
     git clone https://github.com/senberg/music-mashup.git
 
 ## How to build and run project locally:
-
+    
+    cd music-mashup
     mvn
 
 ## Examples of how to use the API:
